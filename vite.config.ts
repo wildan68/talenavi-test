@@ -26,7 +26,7 @@ export default defineConfig({
     }),
     Components({
       dirs: ['./src/components'],
-      dts: true,
+      dts: 'components.d.ts',
       deep: true,
       resolvers: [
         IconsResolver({

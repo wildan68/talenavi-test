@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import type { Component } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
+import { MainServices } from '@/services'
+import { useTaskStore } from '@/stores/task.store'
+const store = useTaskStore()
 
 type TMenu = 'table' | 'kanban'
 const menu = ref<TMenu>('table')
@@ -19,6 +23,19 @@ const ComponentMenu = reactive<{
   icon: 'tabler-layout-kanban',
   component: defineAsyncComponent(() => import('@/components/home/Kanban.vue'))
 }])
+
+const { data } = useQuery({
+  queryKey: [MainServices.getTask.key],
+  queryFn: async () => await MainServices.getTask.call(),
+  throwOnError: true
+})
+
+watchEffect(() => {
+  if (!data.value) return
+  if (!data.value.data) return
+
+  store.setTasks(data.value.data)
+})
 </script>
 
 <template>

@@ -5,18 +5,13 @@ export type IPagination = {
   total_pages?: number
 }
   
-export type IMeta = {
-  status: number
-  message: string
-}
-  
 export type IResponse<T> = {
-  meta: IMeta
+  response: boolean
   data: T
   pagination?: IPagination
 }
   
 export type IErrorResponse = {
-  meta: IMeta
+  response: boolean
   data: string[]
 }
