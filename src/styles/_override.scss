@@ -1,0 +1,14 @@
+.p-iconfield {
+  display: flex;
+  align-items: center;
+
+  > div {
+    width: 100%;
+  }
+
+  .p-inputicon {
+    top: unset !important;
+    margin-top: unset !important;
+    transform: scale(0.75) !important;
+  }
+}
