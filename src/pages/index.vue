@@ -3,6 +3,7 @@ import type { Component } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { MainServices } from '@/services'
 import { useTaskStore } from '@/stores/task.store'
+import type { IMockResponse } from '@/types/mock.type'
 const store = useTaskStore()
 
 type TMenu = 'table' | 'kanban'
@@ -34,7 +35,14 @@ watchEffect(() => {
   if (!data.value) return
   if (!data.value.data) return
 
-  store.setTasks(data.value.data)
+  const remappedData = data.value.data.map((item: IMockResponse) => {
+    return {
+      ...item,
+      date: null
+    }
+  })
+
+  store.setTasks(remappedData)
 })
 </script>
 

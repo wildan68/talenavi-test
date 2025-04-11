@@ -1,4 +1,6 @@
 import PrimeVue from 'primevue/config'
+import DialogService from 'primevue/dialogservice'
+import ToastService from 'primevue/toastservice'
 import ThemesConfig from '@/plugins/primevue/themes.config'
 import type { App } from 'vue'
 
@@ -15,6 +17,8 @@ const usePrimeVue = (): { install(app: App): void } => {
           }
         }
       })
+      app.use(DialogService)
+      app.use(ToastService)
     },
   }
 }

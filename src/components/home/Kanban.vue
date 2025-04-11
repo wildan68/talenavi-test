@@ -4,7 +4,7 @@
 
 <template>
   <div class="flex flex-col gap-6">
-    <Menu />
+    <TaskMenu />
     <div>Ini Kanban</div>
   </div>
 </template>
