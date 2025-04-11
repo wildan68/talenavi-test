@@ -86,6 +86,7 @@ const typeClass = (data: IMockResponse) => {
 const onCreateTask = () => {
   store.addTask({
     title: createTaskTitle.value,
+    developer: '',
     status: 'Ready to start',
     priority: createTaskPriority.value as string,
     'Estimated SP': 0,
