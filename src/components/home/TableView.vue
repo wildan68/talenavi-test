@@ -86,6 +86,7 @@ const typeClass = (data: IMockResponse) => {
 const onCreateTask = () => {
   store.addTask({
     title: createTaskTitle.value,
+    status: 'Ready to start',
     priority: createTaskPriority.value as string,
     'Estimated SP': 0,
     'Actual SP': 0
@@ -158,8 +159,9 @@ const onRemoveDate = () => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="flex flex-col">
     <TaskMenu />
+
     <DataTable
       :value="allTask"
       show-gridlines
@@ -446,7 +448,7 @@ const onRemoveDate = () => {
         class="flex flex-col gap-2"
       >
         <div
-          v-for="item in popoverData.developer.split(',')"
+          v-for="item in (popoverData.developer as string).split(',')"
           :key="item"
           class="flex items-center gap-2"
         >

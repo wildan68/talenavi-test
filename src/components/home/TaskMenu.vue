@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/stores/task.store'
-import { useComponent } from '@wildanrizky/vue-inline-field'
 import type { PopoverMethods, TieredMenuMethods } from 'primevue'
 import type { MenuItem } from 'primevue/menuitem'
 
 const store = useTaskStore()
 const search = ref<string>('')
-const { InlineField } = useComponent()
 const selectDeveloperRef = ref<PopoverMethods | null>(null)
 const developers = computed(() => store.developers)
 const sortFilterRef = ref<TieredMenuMethods>()
@@ -15,6 +13,8 @@ const filters = reactive<{
 }>({
   developer: [],
 })
+const mode = computed(() => store.mode)
+const createTask = ref<boolean>(false)
 
 const sortFilterMenu = computed<MenuItem[]>(() => [
   {
@@ -118,13 +118,16 @@ const onSelectDeveloper = (person: string) => {
   
   store.filterByDeveloper(filters.developer = [...filters.developer, person])
 }
+
+const onCreateTask = () => createTask.value = !createTask.value
 </script>
 
 <template>
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-2 sticky top-[56px] py-6 z-[99] bg-white mb-6 border-b-2 border-b-gray-100">
     <Button
       icon="tabler-plus"
       label="New Task"
+      @click="onCreateTask"
     />
 
     <IconField>
@@ -156,6 +159,8 @@ const onSelectDeveloper = (person: string) => {
       :model="sortFilterMenu"
       popup
     />
+
+    <Summary v-if="mode === 'kanban'" />
   </div>
 
   <Popover ref="selectDeveloperRef">
@@ -179,4 +184,6 @@ const onSelectDeveloper = (person: string) => {
       <span>{{ person }}</span>
     </div>
   </Popover>
+
+  <CreateTask v-model="createTask" />
 </template>

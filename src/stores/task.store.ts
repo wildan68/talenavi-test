@@ -6,15 +6,17 @@ export const useTaskStore = defineStore('tasks', {
     tasks: IMockResponse[],
     filteredTasks: IMockResponse[]
     developers: string[]
+    mode: 'table' | 'kanban'
   } => ({
     tasks: [],
     filteredTasks: [],
-    developers: []
+    developers: [],
+    mode: 'table'
   }),
   actions: {
     setTasks(tasks: IMockResponse[]) {
       this.tasks = tasks
-      const allDeveloper = tasks.map((task) => task.developer.split(', ')).flat().filter((value, index, self) => self.indexOf(value) === index)
+      const allDeveloper = tasks.map((task) => (task.developer as string).split(', ')).flat().filter((value, index, self) => self.indexOf(value) === index)
       this.developers = allDeveloper
     },
     isActiveFiltered() {
@@ -25,6 +27,8 @@ export const useTaskStore = defineStore('tasks', {
     },
     addTask(task: Partial<IMockResponse>) {
       this.tasks = [task as IMockResponse, ...this.tasks]
+      const allDeveloper = this.tasks.map((task) => (task.developer as string).split(', ')).flat().filter((value, index, self) => self.indexOf(value) === index)
+      this.developers = allDeveloper
     },
     editTask(index: number, task: Partial<IMockResponse>) {
       if (this.isActiveFiltered()) {
@@ -36,10 +40,10 @@ export const useTaskStore = defineStore('tasks', {
     },
     filterByDeveloper(developer: string[]) {
       if (this.isActiveFiltered()) {
-        this.filteredTasks = this.filteredTasks.filter((task) => task.developer.split(', ').some((person) => developer.includes(person)))
+        this.filteredTasks = this.filteredTasks.filter((task) => (task.developer as string).split(', ').some((person) => developer.includes(person)))
         return
       }
-      this.filteredTasks = this.tasks.filter((task) => task.developer.split(', ').some((person) => developer.includes(person)))
+      this.filteredTasks = this.tasks.filter((task) => (task.developer as string).split(', ').some((person) => developer.includes(person)))
     },
     sortByAscNumber(column: keyof IMockResponse) {
       if (!['Estimated SP', 'Actual SP'].includes(column as string)) return
@@ -122,6 +126,9 @@ export const useTaskStore = defineStore('tasks', {
       }
 
       return this.tasks.reduce((acc, task) => acc + (task['Actual SP'] as number), 0)
+    },
+    changeMode(mode: 'table' | 'kanban') {
+      this.mode = mode
     }
   }
 })

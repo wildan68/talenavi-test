@@ -44,12 +44,16 @@ watchEffect(() => {
 
   store.setTasks(remappedData)
 })
+
+watch(menu, () => {
+  store.changeMode(menu.value)
+})
 </script>
 
 <template>
   <div class="flex flex-col gap-6">
     <Tabs v-model:value="menu">
-      <TabList>
+      <TabList :pt="{ root: { class: '!sticky !top-0 bg-white z-[99]'}}">
         <Tab
           v-for="item in ComponentMenu"
           :key="item.key"

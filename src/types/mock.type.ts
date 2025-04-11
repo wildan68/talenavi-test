@@ -1,7 +1,7 @@
 export type IMockResponse = {
   index?: number
   title: string
-  developer: string
+  developer: string | string[]
   priority: string
   status: string
   type: string
