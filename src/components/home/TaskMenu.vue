@@ -12,13 +12,8 @@ const developers = computed(() => store.developers)
 const sortFilterRef = ref<TieredMenuMethods>()
 const filters = reactive<{
   developer: string[]
-  sortFilter: MenuItem[]
 }>({
   developer: [],
-  sortFilter: [{
-    label: 'Ascending',
-
-  }]
 })
 
 const sortFilterMenu = computed<MenuItem[]>(() => [
@@ -160,13 +155,6 @@ const onSelectDeveloper = (person: string) => {
       ref="sortFilterRef"
       :model="sortFilterMenu"
       popup
-    />
-
-    <InlineField
-      v-model="search"
-      field-type="InputText"
-      fluid
-      placeholder="search"
     />
   </div>
 

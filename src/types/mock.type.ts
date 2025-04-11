@@ -8,4 +8,5 @@ export type IMockResponse = {
   "Estimated SP": number | null
   "Actual SP": number | null
   date: string | Date | null
+  [key: string]: any
 }

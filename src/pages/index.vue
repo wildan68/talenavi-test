@@ -17,12 +17,12 @@ const ComponentMenu = reactive<{
   key: 'table',
   label: 'Main Table',
   icon: 'tabler-table',
-  component: defineAsyncComponent(() => import('@/components/home/Table.vue'))
+  component: defineAsyncComponent(() => import('@/components/home/TableView.vue'))
 }, {
   key: 'kanban',
   label: 'Kanban',
   icon: 'tabler-layout-kanban',
-  component: defineAsyncComponent(() => import('@/components/home/Kanban.vue'))
+  component: defineAsyncComponent(() => import('@/components/home/KanbanView.vue'))
 }])
 
 const { data } = useQuery({

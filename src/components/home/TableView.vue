@@ -12,6 +12,8 @@ const store = useTaskStore()
 const tasks = computed(() => store.tasks)
 const filteredTasks = computed(() => store.filteredTasks)
 const allTask = computed(() => filteredTasks.value.length > 0 && tasks.value.length > 0 ? filteredTasks.value : tasks.value)
+const totalEstimatedSp = computed(() => store.sumEstimatedSp())
+const totalActualSp = computed(() => store.sumActualSp())
 const isCreateTask = ref<boolean>(false)
 const createTaskTitle = ref<string>('')
 const createTaskRef = ref<HTMLElement | null>(null)
@@ -110,7 +112,7 @@ const onSaveTask = ({ index, data, event, column }: { index: number, data: IMock
     }
   }
 
-  store.editTask(index, { ...data, [column]: event })
+  store.editTask(index, { ...data, [column]: ['Estimated SP', 'Actual SP'].includes(column) ? Number(event) : event })
 }
 
 const onShowDeveloper = (event: MouseEvent, data: IMockResponse) => {
@@ -376,12 +378,33 @@ const onRemoveDate = () => {
           v-focustrap
         >
           <template v-if="!isCreateTask">
-            <div
-              class="flex items-center gap-2"
-              @click="isCreateTask = !isCreateTask"
-            >
-              <Icon name="tabler-plus" />
-              <span>Create new task</span>
+            <div class="flex justify-between items-center">
+              <div
+                class="flex items-center gap-2"
+                @click="isCreateTask = !isCreateTask"
+              >
+                <Icon name="tabler-plus" />
+                <span>Create new task</span>
+              </div>
+
+              <Summary />
+
+              <div class="flex gap-2 items-center">
+                <Badge :pt="{ root: { class: '!py-4 flex items-center gap-2' }}">
+                  Estimated SP 
+                  <Badge
+                    :value="totalEstimatedSp"
+                    severity="secondary"
+                  />
+                </Badge>
+                <Badge :pt="{ root: { class: '!py-4 flex items-center gap-2' }}">
+                  Actual SP 
+                  <Badge
+                    :value="totalActualSp"
+                    severity="secondary"
+                  />
+                </Badge>
+              </div>
             </div>
           </template>
 

@@ -1,4 +1,4 @@
-import type { IMockResponse } from "@/types/mock.type"
+import type { IMockResponse } from '@/types/mock.type'
 import dayjs from 'dayjs'
 
 export const useTaskStore = defineStore('tasks', {
@@ -42,7 +42,7 @@ export const useTaskStore = defineStore('tasks', {
       this.filteredTasks = this.tasks.filter((task) => task.developer.split(', ').some((person) => developer.includes(person)))
     },
     sortByAscNumber(column: keyof IMockResponse) {
-      if (!['Estimated SP', 'Actual SP'].includes(column)) return
+      if (!['Estimated SP', 'Actual SP'].includes(column as string)) return
 
       if (this.isActiveFiltered()) {
         this.filteredTasks = this.filteredTasks.sort((a, b) => (a[column] as number) - (b[column] as number))
@@ -52,7 +52,7 @@ export const useTaskStore = defineStore('tasks', {
       this.filteredTasks = this.tasks.sort((a, b) => (a[column] as number) - (b[column] as number))
     },
     sortByDescNumber(column: keyof IMockResponse) {
-      if (!['Estimated SP', 'Actual SP'].includes(column)) return
+      if (!['Estimated SP', 'Actual SP'].includes(column as string)) return
 
       if (this.isActiveFiltered()) {
         this.filteredTasks = this.filteredTasks.sort((a, b) => (b[column] as number) - (a[column] as number))
@@ -89,6 +89,39 @@ export const useTaskStore = defineStore('tasks', {
         return
       }
       this.filteredTasks = this.tasks.sort((a, b) => dayjs(b[column]).unix() - dayjs(a[column]).unix())
+    },
+    legendsCount(data: Record<string, string>, type: string) {
+      const status = Object.keys(data)
+      
+      if (this.isActiveFiltered()) {
+        const allStatus = status.reduce((acc, key) => {
+          acc[key] = this.filteredTasks.filter((task) => task[type] === key).length
+          return acc
+        }, {} as Record<string, number>)
+
+        return Object.entries(allStatus).map(([key, value]) => ({ label: key, count: value, color: data[key as keyof typeof data] }))
+      }
+      
+      const allStatus = status.reduce((acc, key) => {
+        acc[key] = this.tasks.filter((task) => task[type] === key).length
+        return acc
+      }, {} as Record<string, number>)
+
+      return Object.entries(allStatus).map(([key, value]) => ({ label: key, count: value, color: data[key as keyof typeof data] }))
+    },
+    sumEstimatedSp() {
+      if (this.isActiveFiltered()) {
+        return this.filteredTasks.reduce((acc, task) => acc + (task['Estimated SP'] as number), 0)
+      }
+
+      return this.tasks.reduce((acc, task) => acc + (task['Estimated SP'] as number), 0)
+    },
+    sumActualSp() {
+      if (this.isActiveFiltered()) {
+        return this.filteredTasks.reduce((acc, task) => acc + (task['Actual SP'] as number), 0)
+      }
+
+      return this.tasks.reduce((acc, task) => acc + (task['Actual SP'] as number), 0)
     }
   }
 })
